@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monte Coffee | Najlepsza kawa dla Twojej firmy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --white: #ffffff;
+      --brown-dark: #3e2723;
+      --brown-light: #a47148;
+      --light-bg: #F5F5F5;
+      --dark-text: #3E2723;
+      --primary-dark: #3E2723;
+      --primary-light: #8D6E63;
+      --accent: #A1887F;
+      --transition: all 0.3s ease;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 60vh;
+      overflow: hidden;
+      margin-bottom: 5rem;
+    }
+
+    .slider {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .slide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .slide-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+
+    .slide-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: var(--white);
+      z-index: 2;
+      width: 80%;
+      max-width: 800px;
+    }
+
+    .slide-content h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    }
+
+    .slide-content p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .slider-nav {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      z-index: 3;
+    }
+
+    .slider-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      margin: 0 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .slider-dot.active {
+      background-color: var(--white);
+    }
+
+    @media (max-width: 768px) {
+      .slide-content h2 {
+        font-size: 2.5rem;
+      }
+      .slide-content p {
+        font-size: 1rem;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    header {
+      background-color: var(--primary-dark);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      color: var(--white);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: var(--transition);
+      position: relative;
+      padding: 0.5rem 0;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--accent);
+      transition: var(--transition);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: var(--brown-light);
+      color: var(--white);
+      padding: 14px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: var(--brown-dark);
+    }
+
+    .section {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: var(--primary-dark);
+      text-align: center;
+      position: relative;
+    }
+
+    .section h2::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background-color: var(--primary-light);
+      margin: 1.5rem auto 0;
+    }
+
+    .text-block {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .grid img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: var(--transition);
+    }
+
+    .grid img:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .news ul {
+      list-style: none;
+      max-width: 900px;
+      margin: 3rem auto 0;
+      padding: 0;
+    }
+
+    .news li {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .news li:last-child {
+      border-bottom: none;
+    }
+
+    .news strong {
+      color: var(--primary-medium);
+      font-weight: 600;
+    }
+
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 2px rgba(141, 110, 99, 0.2);
+    }
+
+    .contact-form button {
+      width: 100%;
+      background-color: var(--primary-dark);
+      color: white;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+
+    .contact-form button:hover {
+      background-color: var(--primary-medium);
+    }
+
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+      font-weight: 300;
+    }
+
+    footer p:last-child {
+      margin-top: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .section h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<body style="background-color: #ede2d7; margin: 0; font-family: 'Montserrat', sans-serif;">
+
+<header style="background-color: #927460; padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 15px rgba(0,0,0,0.1);">
+  <div class="header-container" style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+    <div class="logo" style="display: flex; align-items: center; gap: 1rem;">
+      <img src="zdjecie11.webp" alt="Monte Coffee logo" style="height: 55px; width: auto; transform: translateY(-5px);">
+      <a href="strona1.html" style="text-decoration: none;">
+  <span style="font-family: 'Montserrat', sans-serif; font-size: 1.75rem; font-weight: 600; color: #fff; line-height: 1;">
+    MONTE COFFEE
+  </span>
+</a>
+    </div>
+    <nav style="display: flex; gap: 2rem;">
+      <a href="strona2.html" style="color: #fff; text-decoration: none; font-weight: 500; margin-right: 20px;">DLA FIRM</a>
+  <a href="strona3.html" style="color: #fff; text-decoration: none; font-weight: 500; margin-right: 20px;">OFERTA</a>
+  <a href="strona4.html" style="color: #fff; text-decoration: none; font-weight: 500; margin-right: 20px;">AKTUALNOŚCI</a>
+  <a href="strona5.html" style="color: #fff; text-decoration: none; font-weight: 500; margin-right: 20px;">O NAS</a>
+  <a href="strona6.html" style="color: #fff; text-decoration: none; font-weight: 500;">KONTAKT</a>
+</nav>
+  </div>
+</header>
+
+  <div class="slider-container">
+    <div class="slider" id="slider">
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Kawa Monte Coffee" class="slide-img">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <h2>Najlepsza kawa dla Twojej firmy</h2>
+          <p>Odkryj wyjątkowe smaki z naszych starannie wyselekcjonowanych ziaren</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Palarnia kawy" class="slide-img">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <h2>Świeżo palone ziarna</h2>
+          <p>Najwyższej jakości kawa palona z pasją i dbałością o każdy detal</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Kawa w biurze" class="slide-img">
+        <div class="slide-overlay"></div>
+        <div class="slide-content">
+          <h2>Kawa w Twoim biurze</h2>
+          <p>Kompleksowe rozwiązania dla firm i przestrzeni coworkingowych</p>
+        </div>
+      </div>
+    </div>
+    <div class="slider-nav" id="sliderNav">
+      <div class="slider-dot active" data-index="0"></div>
+      <div class="slider-dot" data-index="1"></div>
+      <div class="slider-dot" data-index="2"></div>
+    </div>
+  </div>
+
+   <section class="section oferta" style="background-color: #ede2d7; padding: 0rem 2rem;">
+  <h2 style="color: #4e342e; font-size: 2.5rem; text-align: center; margin-bottom: 1rem; font-weight: 700; letter-spacing: 1px;">OFERTA</h2>
+  <p style="text-align: center; font-size: 1rem; color: #5D4037; max-width: 800px; margin: 0 auto 3rem;">
+    Szukasz niezawodnego dostawcy wysokiej jakości kawy dla swojej firmy? Monte Coffee to polska marka, która łączy pasję do kawy z profesjonalizmem. Oferujemy starannie wyselekcjonowane ziarna, które zachwycą nawet najbardziej wymagających smakoszy.
+  </p>
+
+  <div style="background-image: url('zdjecie10.webp'); background-size: cover; background-position: center; border-radius: 20px; padding: 5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+    <h3 style="flex: 1 1 100%; color: #fff; font-size: 2rem; font-weight: 700; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); text-align: center;">ZAPOZNAJ SIĘ Z NASZĄ KAWĄ</h3>
+    <div style="flex: 1 1 100%; display: flex; justify-content: center;">
+      <a href="strona3.html" class="btn" style="background-color: #5D4037; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; font-weight: 600; color: #fff; text-decoration: none; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">DOWIEDZ SIĘ WIĘCEJ</a>
+    </div>
+  </div>
+</section>
+  <section class="section news" style="background-color: #ede2d7; padding: 2rem 2rem;">
+  <h2 style="color: #4e342e; font-size: 2.5rem; text-align: center; margin-bottom: 3rem; font-weight: 700; letter-spacing: 1px;">AKTUALNOŚCI</h2>
+  
+  <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+    
+    <div style="background: #ffffff; padding: 1.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+      <img src="zdjecie4.webp" alt="Monte Coffee w biurze" style="width: 100%; height: 220px; object-fit: cover; border-radius: 12px;">
+      <p style="font-size: 0.85rem; margin-top: 1rem; text-align: left;">29.04.2025</p>
+      <h3 style="font-size: 1.1rem; margin: 0.5rem 0; text-align: left; font-weight: 700;">MONTE COFFEE W TWOIM BIURZE –<br>NOWA OFERTA DLA TWOJEGO BIZNESU</h3>
+      <p style="text-align: left; font-size: 0.95rem;">Stworzyliśmy pakiet „Office Latte” – zestaw z ekspresem, kawą i serwisem w wygodnym systemie subskrypcyjnym. Zapewniamy pełne wsparcie techniczne i regularne dostawy dla firm i przestrzeni coworkingowych.</p>
+    </div>
+
+    <div style="background: #ffffff; padding: 1.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+      <img src="zdjecie5.webp" alt="Ekologiczne opakowania" style="width: 100%; height: 220px; object-fit: cover; border-radius: 12px;">
+      <p style="font-size: 0.85rem; margin-top: 1rem; text-align: left;">25.01.2025</p>
+      <h3 style="font-size: 1.1rem; margin: 0.5rem 0; text-align: left; font-weight: 700;">EKOLOGICZNE ZMIANY – NOWE OPAKOWANIA PRZYJAZNE ŚRODOWISKU</h3>
+      <p style="text-align: left; font-size: 0.95rem;">Monte Coffee wprowadziło nową linię opakowań w 100% biodegradowalnych i nadających się do recyklingu. To nasz krok w stronę bardziej odpowiedzialnej, ekologicznej produkcji i zrównoważonego rozwoju.</p>
+    </div>
+
+    <div style="background: #ffffff; padding: 1.5rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+      <img src="zdjecie6.webp" alt="Targi HORECA" style="width: 100%; height: 220px; object-fit: cover; border-radius: 12px;">
+      <p style="font-size: 0.85rem; margin-top: 1rem; text-align: left;">9.08.2024</p>
+      <h3 style="font-size: 1.1rem; margin: 0.5rem 0; text-align: left; font-weight: 700;">TARGI HORECA 2024 – DZIĘKUJEMY ZA SPOTKANIA!</h3>
+      <p style="text-align: left; font-size: 0.95rem;">Dziękujemy wszystkim, którzy odwiedzili nasze stoisko podczas targów HORECA w Warszawie – cieszymy się z rosnącego zainteresowania Monte Coffee i możliwością podzielenia się naszą pasją do kawy.</p>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 3rem;">
+    <a href="strona4.html" class="btn" style="background-color: #5D4037; padding: 1rem 2.5rem; border-radius: 25px; font-size: 1rem; font-weight: 600; color: #fff; text-decoration: none; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">SPRAWDŹ</a>
+  </div>
+</section>
+
+
+
+  <section class="section about" style="background-color: #ede2d7; padding: 0.75rem 2rem;">
+    <h2 style="color: #4e342e; font-size: 2.5rem; text-align: center; margin-bottom: 3rem; font-weight: 700; letter-spacing: 1px;">O NAS</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 3rem; justify-content: center; align-items: flex-start;">
+      <div style="flex: 1 1 400px; max-width: 500px;">
+        <img src="zdjecie10.webp" alt="kobieta z kawą na zewnątrz" style="width: 100%; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+      </div>
+      <div style="flex: 1 1 500px; font-size: 1.1rem; color: #4e342e;">
+        <p style="margin-bottom: 1.5rem;">Monte Coffee to więcej niż kawa — to przemyślana filozofia smaku, jakości i relacji biznesowych. Jesteśmy polską marką stworzoną z pasji do doskonałości w filiżance, powstałą z myślą o firmach, które cenią sobie nie tylko smak, ale i profesjonalizm obsługi.</p>
+        <p>Dostarczamy najwyższej jakości kawę do kawiarni, restauracji, hoteli, biur i sklepów na Mazowszu. Nasze ziarna pochodzą z wyselekcjonowanych plantacji w Ameryce Południowej, Afryce i Azji — palimy je z dbałością o detale, by wydobyć pełnię aromatu i smaku.</p>
+      </div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 3rem; justify-content: center; align-items: flex-start; margin-top: 4rem;">
+      <div style="flex: 1 1 400px; max-width: 500px;">
+        <img src="zdjecie9.webp" alt="ziarna kawy" style="width: 100%; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+      </div>
+      <div style="flex: 1 1 500px; font-size: 1.1rem; color: #4e342e;">
+        <p style="margin-bottom: 1.5rem;">W Monte Coffee łączymy rzemieślniczą tradycję z nowoczesną technologią i elastyczną logistyką. Stawiamy na partnerskie relacje, oferując regularne dostawy, indywidualne podejście, prywatne etykiety, wsparcie w zakresie ekspresów i szkolenia.</p>
+        <p>Wiemy, że dla wielu firm kawa to nie tylko dodatek, ale integralna część ich tożsamości. Dlatego dbamy o to, aby każdy nasz klient czuł, że pracuje z marką, która naprawdę rozumie jego potrzeby.</p>
+        <p style="font-weight: 600; color: var(--primary-medium); margin-top: 1rem;"><strong>Monte Coffee – bo każda filiżanka ma znaczenie.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" style="background-color: #ede2d7; padding: 2rem 2rem;">
+    <h2 style="color: #4e342e; font-size: 2.5rem; text-align: center; margin-bottom: 1rem; font-weight: 700; letter-spacing: 1px;">FORMULARZ KONTAKTOWY</h2>
+    <p style="text-align: center; font-size: 1rem; color: #5D4037; max-width: 800px; margin: 0 auto 3rem;">Jesteśmy do Twojej dyspozycji – niezależnie od tego, czy chcesz nawiązać współpracę lub zapytać o ofertę. Wypełnij formularz, a nasz zespół odpowie tak szybko, jak to możliwe.</p>
+
+    <div style="background: #fff; border-radius: 20px; padding: 2.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; align-items: center; max-width: 1100px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+      <form class="contact-form" style="flex: 1 1 480px;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #4e342e;">Imię i nazwisko<span style="color: red">*</span></label>
+        <input type="text" required style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 1rem;">
+
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #4e342e;">Adres e-mail<span style="color: red">*</span></label>
+        <input type="email" required style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 1rem;">
+
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #4e342e;">Numer telefonu</label>
+        <input type="tel" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 1rem;">
+
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #4e342e;">Wiadomość<span style="color: red">*</span></label>
+        <textarea rows="5" required style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 1rem;"></textarea>
+
+        <p style="font-size: 0.85rem; color: #888; margin-bottom: 1rem;"><span style="color: red">*</span> - wymagane pola</p>
+
+        <button type="submit" class="btn" style="background-color: #5D4037; padding: 0.8rem 2rem; border-radius: 25px; font-size: 1rem; font-weight: 600; color: #fff; border: none; cursor: pointer; transition: 0.3s;">WYŚLIJ</button>
+      </form>
+
+      <div style="flex: 1 1 400px; text-align: center;">
+        <img src="zdjecie7.webp" alt="filiżanka Monte Coffee" style="width: 100%; max-width: 400px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background-color: #ede2d7; padding: 2rem 2rem;">
+    <h2 style="text-align: center; font-size: 40px; text-transform: uppercase; color: #4e342e; margin-bottom: 30px; font-weight: 700; letter-spacing: 1px;">
+      GDZIE NAS ZNAJDZIESZ?
+    </h2>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; gap: 40px;">
+      <div style="flex: 1; min-width: 320px; text-align: left;">
+        <p style="font-size: 24px; font-weight: 600; line-height: 1.6; color: #5d3a2d; text-transform: uppercase;">MONTE COFFEE SP. Z. O.O.<br>UL. SPOKOJNA 7<br>05-091 ZĄBKI</p>
+        <div style="margin-top: 40px;">
+          <p style="display: flex; align-items: center; gap: 14px; font-size: 18px; font-weight: 600; margin-bottom: 25px; color: #5d3a2d;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 40px; height: 40px;">
+            MONTECOFFEE
+          </p>
+          <p style="display: flex; align-items: center; gap: 14px; font-size: 18px; font-weight: 600; color: #5d3a2d;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Facebook_icon.svg" alt="Facebook" style="width: 40px; height: 40px;">
+            MONTE COFFEE
+          </p>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 320px;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.3839346268784!2d21.11807851579934!3d52.293555979775504!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ece9dc4e2a30f%3A0x305b697a82088b77!2sZ%C4%85bki%2C%20ul.%20Spokojna%207!5e0!3m2!1spl!2spl!4v1623154897785!5m2!1spl!2spl" width="100%" height="320" style="border:0; border-radius: 16px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+<hr style="border: none; height: 1px; background-color: #c7bfb4; margin: 0;">
+
+<footer style="background-color: #ede2d7; padding: 3rem 2rem; text-align: center; color: #3E2723; font-size: 0.9rem;">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: flex-start; gap: 2rem; max-width: 1100px; margin: 0 auto;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <img src="zdjecie11.webp" alt="Monte Coffee logo" style="height: 35px; transform: translateY(-2px);">
+      <span style="font-weight: 600;">MONTE COFFEE</span>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+      <p>Polityka prywatności</p>
+      <p>RODO</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+      <p>MONTE COFFE SP. Z. O.O.</p>
+      <p>UL. SPOKOJNA 7</p>
+      <p>05-091 ZĄBKI</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+      <p>MONTECOFFEE@BIURO.PL</p>
+      <p>+48 123 123 123</p>
+      <p>INFOLINIA CZYNNNA OD PN-PT</p>
+      <p>W GODZINACH 8–19</p>
+    </div>
+  </div>
+  <p style="margin-top: 2rem;">&copy; MONTE COFFEE 2025</p>
+</footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const slider = document.getElementById('slider');
+      const dots = document.querySelectorAll('.slider-dot');
+      let currentSlide = 0;
+      const totalSlides = document.querySelectorAll('.slide').length;
+      let slideInterval;
+
+      function goToSlide(index) {
+        if (index < 0 || index >= totalSlides) return;
+        
+        currentSlide = index;
+        slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentSlide);
+        });
+      }
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', function() {
+          const slideIndex = parseInt(this.getAttribute('data-index'));
+          goToSlide(slideIndex);
+          resetInterval();
+        });
+      });
+      function startInterval() {
+        slideInterval = setInterval(() => {
+          goToSlide((currentSlide + 1) % totalSlides);
+        }, 5000);
+      }
+
+      function resetInterval() {
+        clearInterval(slideInterval);
+        startInterval();
+      }
+
+      startInterval();
+
+      slider.addEventListener('mouseenter', () => {
+        clearInterval(slideInterval);
+      });
+
+      slider.addEventListener('mouseleave', () => {
+        startInterval();
+      });
+    });
+  </script>
+</body>
+</html>
